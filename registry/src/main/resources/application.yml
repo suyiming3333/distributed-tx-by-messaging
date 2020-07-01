@@ -1,0 +1,17 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: registry
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: admin
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://admin:admin@127.0.0.1:${server.port}/eureka/
