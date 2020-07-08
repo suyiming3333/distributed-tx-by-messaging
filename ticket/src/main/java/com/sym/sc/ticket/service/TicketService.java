@@ -26,12 +26,15 @@ public class TicketService {
                 containerFactory = "msgFactory")
     public void lockTicketFromMq(OrderDTO dto){
         logger.info("got new order:{}",dto.toString());
+        //尝试锁票
         int lockTicketCnt = ticketRepository.locketTicket(dto.getCustomerId(),dto.getTicketNum());
+        //锁票成功
         if(lockTicketCnt == 1){
             dto.setStatus("TICKET_LOCKED");
+            //锁票成功发送消息到队列，驱动order服务创建订单
             jmsTemplate.convertAndSend("order:locked",dto);
         }else{
-            // TODO: 2020/6/30 索票失败
+            // TODO: 2020/6/30 锁票失败
         }
     }
 

@@ -40,7 +40,7 @@ public class OrderService {
             createOrder = orderRepository.save(createOrder);
             dto.setId(createOrder.getId());
         }
-        //订单创建完，发送到待支付队列
+        //订单创建完，发送到待支付队列，到custom服务消费
         dto.setStatus("NEW");
         jmsTemplate.convertAndSend("order:pay",dto);
     }

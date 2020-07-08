@@ -43,8 +43,9 @@ public class OrderResource implements IOrderService {
      */
     @PostMapping("")
     public void create(@RequestBody OrderDTO dto) {
-        //设置uuid用于标记订单创建订单的小时是否已经被处理过
+        //设置uuid用于标记订单创建订单的消息是否已经被处理过
         dto.setUuid(timeBasedGenerator.generate().toString());
+        //创建订单消息发送给ticket服务监听的消息队列
         jmsTemplate.convertAndSend("order:new",dto);
     }
 

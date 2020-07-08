@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1a0c29bb-52a7-493e-bc5d-d039b5d84d99" name="Default Changelist" comment="" />
+    <list default="true" id="1a0c29bb-52a7-493e-bc5d-d039b5d84d99" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order/src/main/java/com/sym/sc/order/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order/src/main/java/com/sym/sc/order/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order/src/main/java/com/sym/sc/order/web/OrderResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/order/src/main/java/com/sym/sc/order/web/OrderResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticket/src/main/java/com/sym/sc/ticket/service/TicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ticket/src/main/java/com/sym/sc/ticket/service/TicketService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +18,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/user/src/main/java/com/sym/sc/user/dao/CustomerRepository.java" root0="SKIP_INSPECTION" />
@@ -27,6 +35,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1cIfVeG1En8qY5NrDlcUqnRCNPs" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -163,7 +172,10 @@
       <workItem from="1593160503068" duration="408000" />
       <workItem from="1593352456115" duration="13582000" />
       <workItem from="1593523920557" duration="5557000" />
-      <workItem from="1593611117358" duration="5268000" />
+      <workItem from="1593611117358" duration="5682000" />
+      <workItem from="1593851970342" duration="1054000" />
+      <workItem from="1594046004761" duration="707000" />
+      <workItem from="1594212442897" duration="2536000" />
     </task>
     <servers />
   </component>
@@ -259,10 +271,10 @@
       <screen x="0" y="0" width="1280" height="770" />
     </state>
     <state x="2" y="80" key="new project wizard/0.0.1280.770@0.0.1280.770" timestamp="1593436746552" />
-    <state x="304" y="93" width="672" height="678" key="search.everywhere.popup" timestamp="1593526247568">
+    <state x="306" y="95" width="672" height="678" key="search.everywhere.popup" timestamp="1594213101587">
       <screen x="0" y="0" width="1280" height="770" />
     </state>
-    <state x="304" y="93" width="672" height="678" key="search.everywhere.popup/0.0.1280.770@0.0.1280.770" timestamp="1593526247568" />
+    <state x="306" y="95" width="672" height="678" key="search.everywhere.popup/0.0.1280.770@0.0.1280.770" timestamp="1594213101587" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
