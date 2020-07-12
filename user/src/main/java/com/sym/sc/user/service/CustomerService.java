@@ -42,6 +42,9 @@ public class CustomerService {
             return;
         }else{
             if(customer.getDeposit()<dto.getAmount()){
+                logger.warn("deposit not enought");
+                dto.setStatus("DEPOSIT_NOT_ENOUGHT");
+                jmsTemplate.convertAndSend("order:ticket_error",dto);
                 return;//
             }
 

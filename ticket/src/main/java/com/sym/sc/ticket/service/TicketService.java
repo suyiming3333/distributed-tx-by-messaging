@@ -35,6 +35,9 @@ public class TicketService {
             jmsTemplate.convertAndSend("order:locked",dto);
         }else{
             // TODO: 2020/6/30 锁票失败
+            dto.setStatus("TICKET_LOCK_FAILED");
+            //锁票失败，直接发送失败消息给订单队列，创建失败的订单
+            jmsTemplate.convertAndSend("order:failed",dto);
         }
     }
 
@@ -51,6 +54,30 @@ public class TicketService {
         //状态标记为已出票，发送消息到订单完成消息队列
         dto.setStatus("TICKET_MOVED");
         jmsTemplate.convertAndSend("order:finish",dto);
+    }
+
+    /**
+     * 余额不够，解锁票
+     * @param dto
+     */
+    @Transactional
+    @JmsListener(destination = "order:ticket_error",
+            containerFactory = "msgFactory")
+    public void unlockTicket(OrderDTO dto){
+        logger.info("got unlock ticket:{}",dto.toString());
+        //出票异常，解锁票
+        int unlockTicketCnt = ticketRepository.unlockTicket(dto.getCustomerId(),dto.getTicketNum());
+        //消息已经处理过
+        if(unlockTicketCnt == 0){
+            logger.warn("tciket has been unlocked:{}",dto.toString());
+        }
+        //同时，回退移票
+        int moveBackCnt = ticketRepository.moveBackTicket(dto.getCustomerId(),dto.getTicketNum());
+        if(moveBackCnt == 0){
+            logger.info("ticket unmoved or already move back");
+        }
+        //状态标记为已解锁，发送消息到订单完成消息队列
+        jmsTemplate.convertAndSend("order:failed",dto);
     }
 
     @Transactional

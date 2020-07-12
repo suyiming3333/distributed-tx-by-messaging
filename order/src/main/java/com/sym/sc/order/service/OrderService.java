@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -56,6 +57,40 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    /**
+     * 处理失败的订单
+     * 1、一开始就锁票失败了，直接新建一个失败订单
+     * 2、锁票成功，但扣费失败，需要解锁票，然后订单更新为失败
+     * 3、定时任务定时检查超时未完成的订单，设置为订单失败
+     * @param dto
+     */
+    @Transactional
+    @JmsListener(destination = "order:failed",
+            containerFactory = "msgFactory")
+    public void handleFailedOrder(OrderDTO dto){
+        logger.info("start to handle failed order:{}",dto.toString());
+        Order order = new Order();
+        //订单id为空，说明是锁票失败了
+        if(dto.getId() == null){
+            order.setCustomerId(dto.getCustomerId());
+            order.setTickerNum(dto.getTicketNum());
+            order.setReason("ticket lock failed");
+        }else{
+            //订单id不为空，则通过订单id查出订单
+            order = orderRepository.findOne(dto.getId());
+            //由于余额不够导致订单失败
+            if("DEPOSIT_NOT_ENOUGHT".equals(dto.getStatus())){
+                order.setStatus("DEPOSIT_NOT_ENOUGHT");
+            }
+            if("TIMEOUT".equals(dto.getStatus())){
+                order.setStatus("TIMEOUT");
+            }
+        }
+        //创建失败订单
+        order.setStatus("FAILED");
+        orderRepository.save(order);
+    }
+
     private Order createOrder(OrderDTO dto) {
         Order order = new Order();
         order.setUuid(dto.getUuid());
@@ -66,5 +101,23 @@ public class OrderService {
         order.setStatus("NEW");
         order.setCreateDate(ZonedDateTime.now());
         return order;
+    }
+
+    public void checkTimeOrders(){
+        ZonedDateTime checkTime = ZonedDateTime.now().minusMinutes(1L);
+        //查出超时的订单进行失败处理
+        List<Order> orderList = orderRepository.findAllByStatusAndCreateDateBefore("NEW",checkTime);
+        orderList.forEach(order ->{
+            logger.error("time out order:{}",order.toString());
+            OrderDTO dto = new OrderDTO();
+            dto.setId(order.getId());
+            dto.setTicketNum(order.getTickerNum());
+            dto.setUuid(order.getUuid());
+            dto.setAmount(order.getAmount());
+            dto.setTitle(order.getTitle());
+            dto.setCustomerId(order.getCustomerId());
+            dto.setStatus("TIMEOUT");
+            jmsTemplate.convertAndSend("order:failed",dto);
+        });
     }
 }
